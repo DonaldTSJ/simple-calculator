@@ -3,59 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>期权组合数据测算</title>
+    <title>期权组合数据测算 - 富途风格</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap');
+
         /* 全局样式 */
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            font-family: 'Noto Sans SC', sans-serif;
             line-height: 1.6;
-            color: #333;
+            color: #e0e0e0;
             margin: 0;
             padding: 0;
-            background-color: #f5f5f7;
+            background-color: #1c2030;
         }
         .container {
-            max-width: 800px;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
         }
         /* 标题样式 */
         h1, h2 {
-            color: #1d1d1f;
+            color: #ffffff;
         }
         h1 {
-            font-size: 2.5em;
-            margin-bottom: 0.5em;
+            font-size: 24px;
+            margin-bottom: 20px;
+            font-weight: 500;
         }
         h2 {
-            font-size: 1.5em;
-            margin-top: 1.5em;
+            font-size: 18px;
+            margin-top: 20px;
+            font-weight: 500;
+            color: #00b4ff;
         }
         /* 介绍部分样式 */
         .intro {
-            background-color: #fff;
-            border-radius: 18px;
-            padding: 30px;
+            background-color: #252b3d;
+            border-radius: 8px;
+            padding: 20px;
             margin-bottom: 30px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        /* 主要内容区域 */
+        .main-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 20px;
         }
         /* 计算器样式 */
         .calculator {
-            background-color: #1c1c1c;
-            border-radius: 30px;
+            background-color: #252b3d;
+            border-radius: 8px;
             padding: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
             width: 300px;
-            margin: 0 auto;
         }
         .display {
-            background-color: #1c1c1c;
-            color: #fff;
-            font-size: 48px;
+            background-color: #1c2030;
+            color: #ffffff;
+            font-size: 28px;
             text-align: right;
-            padding: 20px 10px;
+            padding: 15px 10px;
             margin-bottom: 20px;
-            border-radius: 10px;
+            border-radius: 4px;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
@@ -63,60 +72,77 @@
         .buttons {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 12px;
+            gap: 10px;
         }
         button {
             border: none;
-            border-radius: 50%;
-            font-size: 24px;
-            height: 65px;
+            border-radius: 4px;
+            font-size: 18px;
+            height: 50px;
             cursor: pointer;
             transition: all 0.2s;
             outline: none;
+            font-family: 'Noto Sans SC', sans-serif;
         }
         button:active {
-            transform: scale(0.95);
-        }
-        .operator {
-            background-color: #ff9f0a;
-            color: #fff;
-            font-weight: bold;
+            transform: scale(0.98);
         }
         .number, .decimal {
-            background-color: #333;
-            color: #fff;
+            background-color: #323a4e;
+            color: #ffffff;
+        }
+        .operator, .equals {
+            background-color: #00b4ff;
+            color: #ffffff;
         }
         .clear, .plus-minus, .percent {
-            background-color: #a5a5a5;
-            color: #000;
-        }
-        .equals {
-            background-color: #ff9f0a;
-            color: #fff;
-            font-weight: bold;
+            background-color: #3a4358;
+            color: #ffffff;
         }
         button:hover {
             opacity: 0.8;
         }
         .number:nth-child(17) {
             grid-column: span 2;
-            border-radius: 35px;
-            padding-left: 25px;
-            text-align: left;
+        }
+        /* 贪吃蛇游戏样式 */
+        .snake-game {
+            background-color: #252b3d;
+            border-radius: 8px;
+            padding: 20px;
+            width: 400px;
+        }
+        #gameCanvas {
+            border: 1px solid #00b4ff;
+        }
+        #startButton {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #00b4ff;
+            color: #ffffff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        #score {
+            color: #00b4ff;
+            font-size: 18px;
+            margin-top: 10px;
         }
         /* 底部链接样式 */
         .footer {
             margin-top: 50px;
             text-align: center;
             padding: 20px;
-            background-color: #fff;
-            border-radius: 18px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            background-color: #252b3d;
+            border-radius: 8px;
         }
         .footer a {
-            color: #0066cc;
+            color: #00b4ff;
             text-decoration: none;
             margin: 0 15px;
+            transition: all 0.3s;
+            font-size: 14px;
         }
         .footer a:hover {
             text-decoration: underline;
@@ -129,51 +155,53 @@
         
         <div class="intro">
             <h2>使用说明</h2>
-            <p>欢迎使用期权组合数据测算计算器。这个工具旨在帮助您快速进行期权相关的计算。以下是使用步骤：</p>
-            <ol>
-                <li>使用数字按钮输入您要计算的数值。</li>
-                <li>使用运算符按钮（+, -, ×, ÷）进行相应的计算。</li>
-                <li>使用等号（=）得出结果。</li>
-                <li>使用清除（C）按钮重新开始计算。</li>
-            </ol>
-            <p>这个计算器支持基本的算术运算，适用于简单的期权数据计算。对于更复杂的期权定价或风险分析，请考虑使用专业的金融软件。</p>
+            <p>欢迎使用期权组合数据测算工具。这个计算器旨在帮助您快速进行期权相关的基础计算。在计算之余，您还可以享受一局经典的贪吃蛇游戏来放松心情。</p>
         </div>
 
-        <div class="calculator">
-            <div class="display">0</div>
-            <div class="buttons">
-                <button class="clear">C</button>
-                <button class="plus-minus">+/-</button>
-                <button class="percent">%</button>
-                <button class="operator">÷</button>
-                <button class="number">7</button>
-                <button class="number">8</button>
-                <button class="number">9</button>
-                <button class="operator">×</button>
-                <button class="number">4</button>
-                <button class="number">5</button>
-                <button class="number">6</button>
-                <button class="operator">-</button>
-                <button class="number">1</button>
-                <button class="number">2</button>
-                <button class="number">3</button>
-                <button class="operator">+</button>
-                <button class="number">0</button>
-                <button class="decimal">.</button>
-                <button class="equals">=</button>
+        <div class="main-content">
+            <div class="calculator">
+                <div class="display">0</div>
+                <div class="buttons">
+                    <button class="clear">C</button>
+                    <button class="plus-minus">+/-</button>
+                    <button class="percent">%</button>
+                    <button class="operator">÷</button>
+                    <button class="number">7</button>
+                    <button class="number">8</button>
+                    <button class="number">9</button>
+                    <button class="operator">×</button>
+                    <button class="number">4</button>
+                    <button class="number">5</button>
+                    <button class="number">6</button>
+                    <button class="operator">-</button>
+                    <button class="number">1</button>
+                    <button class="number">2</button>
+                    <button class="number">3</button>
+                    <button class="operator">+</button>
+                    <button class="number">0</button>
+                    <button class="decimal">.</button>
+                    <button class="equals">=</button>
+                </div>
+            </div>
+
+            <div class="snake-game">
+                <canvas id="gameCanvas" width="400" height="400"></canvas>
+                <button id="startButton">开始游戏</button>
+                <div id="score">得分: 0</div>
             </div>
         </div>
 
         <div class="footer">
-            <a href="https://www.example.com/options-tutorial" target="_blank">期权交易教程</a>
-            <a href="https://www.example.com/market-data" target="_blank">市场数据</a>
-            <a href="https://www.example.com/contact" target="_blank">联系我们</a>
+            <a href="https://www.example.com/options-tutorial">期权教程</a>
+            <a href="https://www.example.com/market-data">市场数据</a>
+            <a href="https://www.example.com/contact">联系我们</a>
         </div>
     </div>
 
     <script>
+        // 计算器代码
         let display = document.querySelector('.display');
-        let buttons = document.querySelectorAll('button');
+        let buttons = document.querySelectorAll('.calculator button');
         let currentValue = '0';
         let previousValue = null;
         let operation = null;
@@ -245,6 +273,148 @@
 
         function updateDisplay() {
             display.textContent = currentValue;
+        }
+
+        // 贪吃蛇游戏代码
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const startButton = document.getElementById('startButton');
+        const scoreElement = document.getElementById('score');
+
+        const gridSize = 20;
+        const tileCount = 20;
+        let snake = [{x: 10, y: 10}];
+        let food = {x: 15, y: 15};
+        let dx = 0;
+        let dy = 0;
+        let score = 0;
+        let gameInterval;
+
+        startButton.addEventListener('click', startGame);
+
+        function startGame() {
+            snake = [{x: 10, y: 10}];
+            food = {x: 15, y: 15};
+            dx = 0;
+            dy = 0;
+            score = 0;
+            updateScore();
+            if (gameInterval) clearInterval(gameInterval);
+            gameInterval = setInterval(gameLoop, 100);
+        }
+
+        function gameLoop() {
+            moveSnake();
+            if (checkCollision()) {
+                gameOver();
+                return;
+            }
+            checkFoodCollision();
+            clearCanvas();
+            drawFood();
+            drawSnake();
+        }
+
+        function moveSnake() {
+            const head = {x: snake[0].x + dx, y: snake[0].y + dy};
+            snake.unshift(head);
+            if (head.x === food.x && head.y === food.y) {
+                score++;
+                updateScore();
+                generateFood();
+            } else {
+                snake.pop();
+            }
+        }
+
+        function checkCollision() {
+            const head = snake[0];
+            return (
+                head.x < 0 || head.x >= tileCount ||
+                head.y < 0 || head.y >= tileCount ||
+                snake.slice(1).some(segment => segment.x === head.x && segment.y === head.y)
+            );
+        }
+
+        function checkFoodCollision() {
+            const head = snake[0];
+            if (head.x === food.x && head.y === food.y) {
+                score++;
+                updateScore();
+                generateFood();
+            }
+        }
+
+        function generateFood() {
+            food = {
+                x: Math.floor(Math.random() * tileCount),
+                y: Math.floor(Math.random() * tileCount)
+            };
+            // 确保食物不会生成在蛇身上
+            while (snake.some(segment => segment.x === food.x && segment.y === food.y)) {
+                food = {
+                    x: Math.floor(Math.random() * tileCount),
+                    y: Math.floor(Math.random() * tileCount)
+                };
+            }
+        }
+
+        function clearCanvas() {
+            ctx.fillStyle = '#252b3d';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
+
+        function drawFood() {
+            ctx.fillStyle = '#00b4ff';
+            ctx.fillRect(food.x * gridSize, food.y * gridSize, gridSize, gridSize);
+        }
+
+        function drawSnake() {
+            ctx.fillStyle = '#ffffff';
+            snake.forEach(segment => {
+                ctx.fillRect(segment.x * gridSize, segment.y * gridSize, gridSize, gridSize);
+            });
+        }
+
+        function gameOver() {
+            clearInterval(gameInterval);
+            alert(`游戏结束！您的得分是: ${score}`);
+        }
+
+        function updateScore() {
+            scoreElement.textContent = `得分: ${score}`;
+        }
+
+        document.addEventListener('keydown', changeDirection);
+
+        function changeDirection(event) {
+            const LEFT_KEY = 37;
+            const RIGHT_KEY = 39;
+            const UP_KEY = 38;
+            const DOWN_KEY = 40;
+
+            const keyPressed = event.keyCode;
+            const goingUp = dy === -1;
+            const goingDown = dy === 1;
+            const goingRight = dx === 1;
+            const goingLeft = dx === -1;
+
+            if (keyPressed === LEFT_KEY && !goingRight) {
+                dx = -1;
+                dy = 0;
+            }
+            if (keyPressed === UP_KEY && !goingDown) {
+                dx = 0;
+                dy = -1;
+            }
+            if (keyPressed === RIGHT_KEY && !goingLeft) {
+                dx = 1;
+                dy = 0;
+            }
+            if (keyPressed === DOWN_KEY && !goingUp) {
+                dx = 0;
+                dy = 1;
+            }
         }
     </script>
 </body>
