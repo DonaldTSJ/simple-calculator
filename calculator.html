@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>美化版苹果风格计算器</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+        .calculator {
+            background-color: #1c1c1c;
+            border-radius: 30px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            width: 300px;
+        }
+        .display {
+            background-color: #1c1c1c;
+            color: #fff;
+            font-size: 48px;
+            text-align: right;
+            padding: 20px 10px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+        button {
+            border: none;
+            border-radius: 50%;
+            font-size: 24px;
+            height: 65px;
+            cursor: pointer;
+            transition: all 0.2s;
+            outline: none;
+        }
+        button:active {
+            transform: scale(0.95);
+        }
+        .operator {
+            background-color: #ff9f0a;
+            color: #fff;
+            font-weight: bold;
+        }
+        .number, .decimal {
+            background-color: #333;
+            color: #fff;
+        }
+        .clear, .plus-minus, .percent {
+            background-color: #a5a5a5;
+            color: #000;
+        }
+        .equals {
+            background-color: #ff9f0a;
+            color: #fff;
+            font-weight: bold;
+        }
+        button:hover {
+            opacity: 0.8;
+        }
+        .number:nth-child(17) {
+            grid-column: span 2;
+            border-radius: 35px;
+            padding-left: 25px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <div class="display">0</div>
+        <div class="buttons">
+            <button class="clear">C</button>
+            <button class="plus-minus">+/-</button>
+            <button class="percent">%</button>
+            <button class="operator">÷</button>
+            <button class="number">7</button>
+            <button class="number">8</button>
+            <button class="number">9</button>
+            <button class="operator">×</button>
+            <button class="number">4</button>
+            <button class="number">5</button>
+            <button class="number">6</button>
+            <button class="operator">-</button>
+            <button class="number">1</button>
+            <button class="number">2</button>
+            <button class="number">3</button>
+            <button class="operator">+</button>
+            <button class="number">0</button>
+            <button class="decimal">.</button>
+            <button class="equals">=</button>
+        </div>
+    </div>
+
+    <script>
+        let display = document.querySelector('.display');
+        let buttons = document.querySelectorAll('button');
+        let currentValue = '0';
+        let previousValue = null;
+        let operation = null;
+        let resetDisplay = false;
+
+        buttons.forEach(button => {
+            button.addEventListener('click', () => {
+                if (button.classList.contains('number')) {
+                    if (currentValue === '0' || resetDisplay) {
+                        currentValue = button.textContent;
+                        resetDisplay = false;
+                    } else {
+                        currentValue += button.textContent;
+                    }
+                } else if (button.classList.contains('decimal')) {
+                    if (!currentValue.includes('.')) {
+                        currentValue += '.';
+                    }
+                } else if (button.classList.contains('operator')) {
+                    if (previousValue !== null) {
+                        calculate();
+                    }
+                    previousValue = currentValue;
+                    operation = button.textContent;
+                    resetDisplay = true;
+                } else if (button.classList.contains('equals')) {
+                    calculate();
+                } else if (button.classList.contains('clear')) {
+                    clear();
+                } else if (button.classList.contains('plus-minus')) {
+                    currentValue = (parseFloat(currentValue) * -1).toString();
+                } else if (button.classList.contains('percent')) {
+                    currentValue = (parseFloat(currentValue) / 100).toString();
+                }
+                updateDisplay();
+            });
+        });
+
+        function calculate() {
+            let result;
+            let prev = parseFloat(previousValue);
+            let current = parseFloat(currentValue);
+            switch(operation) {
+                case '+':
+                    result = prev + current;
+                    break;
+                case '-':
+                    result = prev - current;
+                    break;
+                case '×':
+                    result = prev * current;
+                    break;
+                case '÷':
+                    result = prev / current;
+                    break;
+                default:
+                    return;
+            }
+            currentValue = result.toString();
+            operation = null;
+            previousValue = null;
+        }
+
+        function clear() {
+            currentValue = '0';
+            previousValue = null;
+            operation = null;
+        }
+
+        function updateDisplay() {
+            display.textContent = currentValue;
+        }
+    </script>
+</body>
+</html>  
